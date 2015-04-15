@@ -13,4 +13,3 @@ module Bub
     end
   end
 end
-

@@ -1,5 +1,5 @@
 require "http"
-require 'pit'
+require "pit"
 require "bub/errors/missing_action_name_argument_error"
 require "bub/errors/non_existent_git_repository_error"
 require "bub/errors/unknown_action_name_error"
@@ -20,7 +20,7 @@ module Bub
         warn usage
         raise Errors::MissingActionNameArgumentError
       when "create", "delete"
-        raise Errors::NonExistentGitRepositoryError, action_name unless is_repo?
+        raise Errors::NonExistentGitRepositoryError, action_name unless repo?
         self.send(action_name)
       else
         raise Errors::UnknownActionNameError, action_name
@@ -30,8 +30,8 @@ module Bub
     end
 
     def create
-      response = HTTP.basic_auth(user: "#{username}", pass: "#{config['password']}").
-        post(endpoint, body: "name=#{repo}&scm=git&is_private=true&fork_policy=no_forks")
+      response = HTTP.basic_auth(user: "#{username}", pass: "#{config['password']}")
+                 .post(endpoint, body: "name=#{repo}&scm=git&is_private=true&fork_policy=no_forks")
       if response.code.to_i == 200
         puts "Updating origin"
         puts "git remote add origin git@bitbucket.org:#{username}/#{repo}.git"
@@ -44,8 +44,8 @@ module Bub
 
     def delete
       if deletable?
-        response = HTTP.basic_auth(user: "#{username}", pass: "#{config['password']}").
-          delete(endpoint)
+        response = HTTP.basic_auth(user: "#{username}", pass: "#{config['password']}")
+                   .delete(endpoint)
         if response.code.to_i == 204
           puts "Your repository #{repo} was successfully deleted."
         else
@@ -84,7 +84,7 @@ Commands:
     end
 
     def username
-      @username ||= config['username']
+      @username ||= config["username"]
     end
 
     def endpoint
@@ -97,8 +97,8 @@ Commands:
       @repo ||= repo_name
     end
 
-    def is_repo?
-      system('git rev-parse -q --git-dir >/dev/null 2>&1;')
+    def repo?
+      system("git rev-parse -q --git-dir >/dev/null 2>&1;")
     end
 
     def git_path
@@ -114,9 +114,7 @@ Commands:
       print "Please type in the name of the repository to confirm [(#{repo})] :"
       if STDIN.gets.chomp == repo
         print "Delete this repository? [y/N] :"
-        if STDIN.gets.chomp =~ /y/i
-          return true
-        end
+        return true if STDIN.gets.chomp =~ /y/i
       end
       false
     end

@@ -1,7 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'bub/version'
+require "bub/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "bub"
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["284km"]
   spec.email         = ["at284km@gmail.com"]
 
-  spec.summary       = %q{Command-line tool for Bitbucket(git) to create and remove a repository.}
-  spec.description   = %q{Command-line tool for Bitbucket(git) to create and remove a repository.}
+  spec.summary       = "Command-line tool for Bitbucket(git) to create and remove a repository."
+  spec.description   = "Command-line tool for Bitbucket(git) to create and remove a repository."
   spec.homepage      = "https://github.com/284km/bub"
   spec.license       = "MIT"
 
